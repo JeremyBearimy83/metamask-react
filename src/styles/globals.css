@@ -1,0 +1,98 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  background-color: slategray;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color: transparent;
+  margin-left: 0.5rem;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  transition: 0.3s;
+  border: 2px solid #291749;
+  cursor: pointer;
+  font-size: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  color: rgba(73, 255, 223, 1);
+}
+
+.btn:hover {
+  background-color: rgb(162, 213, 233);
+  color: white;
+}
+
+.details {
+  margin-left: 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(
+    90deg,
+    rgba(73, 255, 223, 1) 0%,
+    rgb(162, 213, 233) 83%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.fw-bold {
+  font-weight: 800;
+  color: white;
+}
+
+.balance {
+  color: rgb(162, 213, 233);
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.value {
+  color: rgba(73, 255, 223, 1);
+}
+
+.connected {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  background: linear-gradient(
+    90deg,
+    rgba(73, 255, 223, 1) 0%,
+    rgb(162, 213, 233) 83%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+select {
+  font-size: 1.2rem;
+  border-radius: 2px;
+  background-color: white;
+
+  color: rgba(107, 124, 204, 1) 83%;
+  padding: 0.2rem;
+  border: none;
+  margin-bottom: 2rem;
+}
