@@ -96,3 +96,27 @@ select {
   border: none;
   margin-bottom: 2rem;
 }
+
+.input-field {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 5px;
+  border: 0px solid black;
+  /* height: 2rem; */
+  width: 30rem;
+  /* max-width: 600px; */
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}

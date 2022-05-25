@@ -27,6 +27,9 @@ const ConnectWallet = () => {
     console.log(chainId, account, active);
   });
 
+  const [inputAccount, setInputAccount] = useState("");
+  const [inputAddress, setInputAddress] = useState("");
+
   const [apiBalance, setApiBalanc] = useState([]);
 
   const getAllBalances = async () => {
@@ -34,10 +37,15 @@ const ConnectWallet = () => {
     const chainIds = [1, 42, 137, 4002];
 
     chainIds.forEach((chainId) => {
-      const url = `https://api.covalenthq.com/v1/${chainId}/address/0xdd15082843A83694Cae0877b751DEb2325fBC4ba/balances_v2/?quote-currency=USD&format=JSON&nft=false&no-nft-fetch=false&key=${api_key}`;
+      const address = account ? account : inputAddress;
+      if (!address) {
+        return;
+      }
+      const url = `https://api.covalenthq.com/v1/${chainId}/address/${address}/balances_v2/?quote-currency=USD&format=JSON&nft=false&no-nft-fetch=false&key=${api_key}`;
       promises.push(axios.get(url));
     });
     let tempBalances = [];
+
     console.log("Here are the promises", promises);
     Promise.all(promises).then((balances) => {
       console.log("This is a balances", balances);
@@ -72,12 +80,12 @@ const ConnectWallet = () => {
   };
 
   useEffect(() => {
-    if (!account) {
-      alert("Connect to a metamask wallet!!!");
-      return;
-    }
     getAllBalances();
-  }, [account]);
+  }, [account, inputAccount]);
+
+  const handleInputAccount = () => {
+    setInputAccount(inputAddress);
+  };
 
   return (
     <div>
@@ -89,6 +97,19 @@ const ConnectWallet = () => {
         <span className="fw-bold">Account:</span>{" "}
         <span className="details">{account}</span>
       </div>
+
+      <div>
+        <input
+          onChange={(e) => setInputAddress(e.target.value)}
+          className="input-field"
+          placeholder="Enter address"
+        />
+        <button className="btn" type="button" onClick={handleInputAccount}>
+          Fetch Balance
+        </button>
+      </div>
+
+      <bold>OR</bold>
       {active ? (
         <div className="connected">Wallet Connected successfully :)</div>
       ) : (
@@ -116,7 +137,7 @@ export default function Home() {
   const [balances, setBalances] = useState([]);
 
   return (
-    <div className={styles.container}>
+    <div className="home">
       <ConnectWallet />
 
       {/*
