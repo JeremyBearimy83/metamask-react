@@ -31,7 +31,7 @@ const ConnectWallet = () => {
 
   const getAllBalances = async () => {
     const promises = [];
-    const chainIds = [1, 137, 4002];
+    const chainIds = [1, 42, 137, 4002];
 
     chainIds.forEach((chainId) => {
       const url = `https://api.covalenthq.com/v1/${chainId}/address/0xdd15082843A83694Cae0877b751DEb2325fBC4ba/balances_v2/?quote-currency=USD&format=JSON&nft=false&no-nft-fetch=false&key=${api_key}`;
