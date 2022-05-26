@@ -1,4 +1,3 @@
-import styles from "../styles/Home.module.css";
 import BigNumber from "bignumber.js";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../components/wallet/connectors";
@@ -21,6 +20,7 @@ const ConnectWallet = () => {
   const { chainId, account, activate, active, library } = useWeb3React();
   const onClick = () => {
     activate(injectedConnector);
+    setInputAccount(account);
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ConnectWallet = () => {
     const chainIds = [1, 42, 137, 4002];
 
     chainIds.forEach((chainId) => {
-      const address = account ? account : inputAddress;
+      const address = inputAccount;
       if (!address) {
         return;
       }
@@ -52,6 +52,7 @@ const ConnectWallet = () => {
       balances.forEach((res) => {
         const response = res.data;
         console.log("This is the response", { response });
+        const commonChainId = response.data.chain_id;
         const temp = response.data.items.map((item, idx) => {
           const balanceObj = {};
           const decimals = item.contract_decimals;
@@ -66,8 +67,9 @@ const ConnectWallet = () => {
           balanceObj["name"] = item.contract_name;
           balanceObj["decimals"] = item.contract_decimals;
           balanceObj["symbol"] = item.contract_ticker_symbol;
-          balanceObj["chain"] = chainIds[idx];
-
+          balanceObj["chain"] = commonChainId;
+          balanceObj["address"] = item.contract_address;
+          balanceObj["assetId"] = `${commonChainId}-${item.contract_address}`;
           console.log(balanceObj);
           return balanceObj;
         });
@@ -80,8 +82,16 @@ const ConnectWallet = () => {
   };
 
   useEffect(() => {
+    console.log("Does this run", inputAccount);
     getAllBalances();
-  }, [account, inputAccount]);
+  }, [inputAccount]);
+
+  useEffect(() => {
+    console.log("When does this run?");
+    if (account) {
+      setInputAccount(account);
+    }
+  }, [account]);
 
   const handleInputAccount = () => {
     setInputAccount(inputAddress);
@@ -110,18 +120,17 @@ const ConnectWallet = () => {
       </div>
 
       <bold>OR</bold>
-      {active ? (
+      {active && (
         <div className="connected">Wallet Connected successfully :)</div>
-      ) : (
-        <button className="btn" type="button" onClick={onClick}>
-          Connect Wallet
-        </button>
       )}
+      <button className="btn" type="button" onClick={onClick}>
+        Connect Wallet
+      </button>
 
       {apiBalance.map((balance) => {
         return (
-          <div key={balance.name} className="balance">
-            {balance.name} ({balance.chain}) balance{" "}
+          <div key={balance.assetId} className="balance">
+            {balance.name} ({balance.chain}):
             <span className="value">{balance.balance}</span>
           </div>
         );
