@@ -9,6 +9,7 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import React, { useEffect } from "react";
 import axios from "axios";
 import { web3BNToFloatString } from "../utils";
+import Loader from "../../public/loader";
 
 const tokenList = TokenListMainnet;
 
@@ -29,10 +30,12 @@ const ConnectWallet = () => {
 
   const [inputAccount, setInputAccount] = useState("");
   const [inputAddress, setInputAddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [apiBalance, setApiBalanc] = useState([]);
 
   const getAllBalances = async () => {
+    setLoading(true);
     const promises = [];
     const chainIds = [1, 42, 137, 4002];
 
@@ -77,6 +80,7 @@ const ConnectWallet = () => {
       });
 
       console.log("Look at temp balances here", tempBalances);
+      setLoading(false);
       setApiBalanc(tempBalances);
     });
   };
@@ -107,7 +111,6 @@ const ConnectWallet = () => {
         <span className="fw-bold">Account:</span>{" "}
         <span className="details">{account}</span>
       </div>
-
       <div>
         <input
           onChange={(e) => setInputAddress(e.target.value)}
@@ -126,6 +129,8 @@ const ConnectWallet = () => {
       <button className="btn" type="button" onClick={onClick}>
         Connect Wallet
       </button>
+
+      <div className="loader">{loading && <Loader />}</div>
 
       {apiBalance.map((balance) => {
         return (
