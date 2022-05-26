@@ -13,6 +13,14 @@ import Loader from "../../public/loader";
 
 const tokenList = TokenListMainnet;
 
+const chainList = [
+  { name: "All", chainId: 0 },
+  { name: "Polygon Mainnet", chainId: 137 },
+  { name: "Ethereum Mainnet", chainId: 1 },
+  { name: "Fantom Tesetnet", chainId: 4002 },
+  { name: "42", chainId: 42 },
+];
+
 const ConnectWallet = () => {
   const api_key = "ckey_0dded0cb1b2846d3a97de858c14";
   const injectedConnector = new InjectedConnector({
@@ -101,6 +109,25 @@ const ConnectWallet = () => {
     setInputAccount(inputAddress);
   };
 
+  const [chainIdFilter, setChainIdFilter] = useState(0);
+
+  const filterBalances = (balances) => {
+    console.log("When is thiis function called", chainIdFilter, balances);
+    if (chainIdFilter == 0) return balances;
+
+    const filteredBalances = balances.filter((b) => {
+      console.log(
+        "Inside the filter",
+        b.chain,
+        chainIdFilter,
+        b.chain == chainIdFilter
+      );
+      return b.chain == chainIdFilter;
+    });
+    console.log("Filtered balances", filteredBalances);
+    return filteredBalances;
+  };
+
   return (
     <div>
       <div>
@@ -129,10 +156,19 @@ const ConnectWallet = () => {
       <button className="btn" type="button" onClick={onClick}>
         Connect Wallet
       </button>
+      <div>
+        <select onChange={(e) => setChainIdFilter(e.target.value)}>
+          {chainList.map((chain) => (
+            <option value={chain.chainId} key={chain.chainId}>
+              {chain.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="loader">{loading && <Loader />}</div>
 
-      {apiBalance.map((balance) => {
+      {filterBalances(apiBalance).map((balance) => {
         return (
           <div key={balance.assetId} className="balance">
             {balance.name} ({balance.chain}):
@@ -156,13 +192,6 @@ export default function Home() {
 
       {/*
       
-      <select onChange={(e) => setSelectedToken(tokenList[e.target.value])}>
-        {tokenList.map((token, index) => (
-          <option value={index} key={token.address}>
-            {token.name}
-          </option>
-        ))}
-      </select>
 
       {balances.map((balance) => {
         return (
