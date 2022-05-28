@@ -10,6 +10,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { web3BNToFloatString } from "../utils";
 import Loader from "../../public/loader";
+import VaultGrid from "../components/Table";
 
 const tokenList = TokenListMainnet;
 
@@ -40,6 +41,12 @@ const ConnectWallet = () => {
   const [inputAddress, setInputAddress] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // aggregatedBalances
+  const [aggBalance, setAggBalance] = useState({
+    totBalance: 0,
+    numAssets: 0,
+    numNetworks: 0,
+  });
   const [apiBalance, setApiBalanc] = useState([]);
 
   const getAllBalances = async () => {
@@ -60,14 +67,21 @@ const ConnectWallet = () => {
     console.log("Here are the promises", promises);
     Promise.all(promises).then((balances) => {
       console.log("This is a balances", balances);
+
+      let tempTotBalance = 0;
+      let tempNumAssets = 0;
+      let tempNumNetworks = 0;
       balances.forEach((res) => {
         const response = res.data;
         console.log("This is the response", { response });
         const commonChainId = response.data.chain_id;
         const temp = response.data.items.map((item, idx) => {
+          if (idx == 0) tempNumNetworks++;
+          tempNumAssets++;
           const balanceObj = {};
           const decimals = item.contract_decimals;
           const pow = new BigNumber("10").pow(new BigNumber(decimals));
+          tempTotBalance = tempTotBalance + item.quote;
 
           balanceObj["balance"] = web3BNToFloatString(
             item.balance,
@@ -90,6 +104,11 @@ const ConnectWallet = () => {
       console.log("Look at temp balances here", tempBalances);
       setLoading(false);
       setApiBalanc(tempBalances);
+      setAggBalance({
+        totBalance: tempTotBalance,
+        numAssets: tempNumAssets,
+        numNetworks: tempNumNetworks,
+      });
     });
   };
 
@@ -138,6 +157,16 @@ const ConnectWallet = () => {
         <span className="fw-bold">Account:</span>{" "}
         <span className="details">{account}</span>
       </div>
+      <div className="fw-bold agg-balance-text">
+        You have
+        <span className="gradient-text">
+          $ {aggBalance.totBalance.toFixed(2)}
+        </span>
+        in <span className="gradient-text">{aggBalance.numAssets}</span> assets
+        across <span className="gradient-text">{aggBalance.numNetworks}</span>
+        networks available to stake
+      </div>
+
       <div>
         <input
           onChange={(e) => setInputAddress(e.target.value)}
@@ -181,32 +210,11 @@ const ConnectWallet = () => {
 };
 
 export default function Home() {
-  const [selectedToken, setSelectedToken] = useState(tokenList[0]);
-
-  const { activate, account, active } = useWeb3React();
-  const [balances, setBalances] = useState([]);
-
   return (
-    <div className="home">
+    <div className="home flex bg-orange-900">
+      <div className="p-5 bg-red-500">hueue</div>
       <ConnectWallet />
-
-      {/*
-      
-
-      {balances.map((balance) => {
-        return (
-          <span key={balance.address} className="balance">
-            {balance.name} balance{" "}
-            <span className="value">{balance.balance}</span>
-          </span>
-        );
-      })}
-
-      <span className="balance">
-        balance <span className="value">{balance}</span>
-      </span>
-    </div>
-      */}
+      <VaultGrid />
     </div>
   );
 }

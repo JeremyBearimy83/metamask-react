@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 3rem;
@@ -5,7 +9,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
-  background-color: slategray;
+  /* background-color: slategray; */
+  background-color: #0a1929;
+  /* background-color: red; */
 }
 
 a {
@@ -44,7 +50,27 @@ a {
 
 .details {
   margin-left: 2rem;
+  margin-right: 2rem;
   font-size: 1.2rem;
+  background: linear-gradient(
+    90deg,
+    rgba(73, 255, 223, 1) 0%,
+    rgb(162, 213, 233) 83%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.agg-balance-text {
+  font-size: 2rem;
+}
+
+.gradient-text {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+  font-size: 3rem;
   background: linear-gradient(
     90deg,
     rgba(73, 255, 223, 1) 0%,
@@ -116,6 +142,7 @@ select {
 
 .home {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: auto;
@@ -123,4 +150,8 @@ select {
 
 .loader {
   margin: 2rem;
+}
+
+.random-class {
+  background-color: khaki;
 }
